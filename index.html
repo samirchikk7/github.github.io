@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Самир Мусабалиев Data / BI Analyst</title>
+    <style>
+        :root {
+            --bg: #f5f5f7;
+            --bg-alt: #ffffff;
+            --text: #111111;
+            --text-muted: #555555;
+            --accent: #2563eb;
+            --accent-soft: rgba(37, 99, 235, 0.08);
+            --border: #e0e0e7;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+            --radius-lg: 24px;
+            --radius-md: 18px;
+            --transition-fast: 0.2s ease;
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg: #020617;
+            --bg-alt: #020617;
+            --text: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent: #60a5fa;
+            --accent-soft: rgba(96, 165, 250, 0.09);
+            --border: #1f2937;
+            --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 55%), var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+
+        @media (min-width: 768px) {
+            .page {
+                padding: 28px 24px 60px;
+            }
+        }
+
+        /* NAVBAR */
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(18px);
+            position: sticky;
+            top: 12px;
+            z-index: 20;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Аватар с фото вместо буквы S */
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            box-shadow: 0 0 8px rgba(0,0,0,0.15);
+        }
+
+        .nav-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-title {
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+        }
+
+        .nav-title-main {
+            font-weight: 600;
+        }
+
+        .nav-title-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: none;
+            gap: 14px;
+            font-size: 13px;
+        }
+
+        .nav-links a {
+            padding: 6px 10px;
+            border-radius: 999px;
+            color: var(--text-muted);
+            transition: background var(--transition-fast), color var(--transition-fast);
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-color: color-mix(in srgb, var(--accent) 12%, transparent);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            font-size: 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: color-mix(in srgb, var(--bg-alt) 75%, transparent);
+            cursor: pointer;
+            transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .btn-ghost:hover {
+            transform: translateY(-1px);
+            border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+        }
+
+        .btn-ghost span.icon {
+            font-size: 14px;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .btn-ghost {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* HERO */
+
+        .hero {
+            margin-top: 22px;
+            margin-bottom: 26px;
+            display: grid;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+                align-items: center;
+                gap: 28px;
+                margin-bottom: 34px;
+            }
+        }
+
+        .hero-main {
+            padding: 22px 18px;
+            border-radius: var(--radius-lg);
+            background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%), var(--bg-alt);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+            background: var(--accent-soft);
+            color: color-mix(in srgb, var(--accent) 80%, var(--text));
+            margin-bottom: 12px;
+        }
+
+        .hero-eyebrow-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+        }
+
+        .hero-title {
+            font-size: clamp(26px, 3vw, 32px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-bottom: 18px;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .tag {
+            font-size: 11px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: color-mix(in srgb, var(--bg) 70%, transparent);
+            color: var(--text-muted);
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            font-size: 13px;
+            padding: 9px 16px;
+            border-radius: 999px;
+            border: none;
+            background: var(--accent);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 16px 40px rgba(37, 99, 235, 0.45);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), translate var(--transition-fast);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.55);
+        }
+
+        .btn-secondary {
+            font-size: 13px;
+            padding: 8px 15px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-soft);
+            border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        }
+
+        .hero-secondary {
+            display: grid;
+            gap: 10px;
+        }
+
+        .hero-card {
+            border-radius: var(--radius-md);
+            padding: 14px 14px 12px;
+            border: 1px solid var(--border);
+            background: color-mix(in srgb, var(--bg-alt) 92%, transparent);
+            box-shadow: 0 14px 36px rgba(15, 23, 42, 0.18);
+        }
+
+        .hero-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .hero-card-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .hero-pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .pill {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--bg) 85%, transparent);
+            border: 1px dashed var(--border);
+            color: var(--text-muted);
+        }
+
+        @media (min-width: 768px) {
+            .hero-card {
+                padding: 16px 16px 14px;
+            }
+        }
+
+        /* SECTIONS */
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ABOUT */
+
+        .about {
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            background: var(--bg-alt);
+            padding: 16px 16px 14px;
+            box-shadow: var(--shadow-soft);
+            font-size: 14px;
+        }
+
+        .about p + p {
+            margin-top: 8px;
+        }
+
+        /* SKILLS */
+
+        .skills-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .skills-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .skill-card {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--bg-alt);
+            padding: 12px 12px 10px;
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+        }
+
+        .skill-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .skill-card-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .skill-list {
+            list-style: none;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .skill-list li::before {
+            content: "•";
+            margin-right: 6px;
+            font-size: 10px;
+            vertical-align: middle;
+            color: var(--accent);
+        }
+
+        /* PROJECTS */
+
+        .projects-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        @media (min-width: 900px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .project-card {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--bg-alt);
+            padding: 12px 12px 11px;
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .project-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .badge {
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: color-mix(in srgb, var(--accent) 85%, var(--text));
+            border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+        }
+
+        .badge-outline {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px dashed var(--border);
+        }
+
+        .project-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .project-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .project-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .project-footer {
+            margin-top: 4px;
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .project-link {
+            font-size: 11px;
+            color: var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* CONTACTS */
+
+        .contacts-card {
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            background: var(--bg-alt);
+            padding: 16px 16px 14px;
+            box-shadow: var(--shadow-soft);
+            display: grid;
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .contacts-card {
+                grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+                align-items: center;
+            }
+        }
+
+        .contact-text-main {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .contact-text-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .contact-list {
+            list-style: none;
+            font-size: 13px;
+        }
+
+        .contact-list li + li {
+            margin-top: 6px;
+        }
+
+        .contact-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .contact-value {
+            font-size: 13px;
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .chip {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: color-mix(in srgb, var(--bg) 75%, transparent);
+            color: var(--text-muted);
+        }
+
+        footer {
+            margin-top: 26px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* UTIL */
+
+        .mono {
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <!-- NAVBAR -->
+    <header class="nav">
+        <div class="nav-left">
+            <div class="nav-logo">
+                <!-- Поставь сюда своё фото: файл рядом с index.html или прямой URL -->
+                <img src="C:\Users\79918\OneDrive\Рабочий стол\photo_2025-12-05_14-16-21.jpg" alt="Самир Мусабалиев">
+            </div>
+            <div class="nav-title">
+                <span class="nav-title-main">Самир Мусабалиев</span>
+                <span class="nav-title-sub">Data / BI Analyst</span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="#about">Обо мне</a>
+            <a href="#skills">Навыки</a>
+            <a href="#projects">Проекты</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+        <div class="nav-right">
+            <button id="theme-toggle" class="btn-ghost" type="button" aria-label="Переключить тему">
+                <span class="icon" id="theme-icon">🌞</span>
+                <span id="theme-label">Светлая</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+        <div class="hero-main">
+            <div class="hero-eyebrow">
+                <span class="hero-eyebrow-dot"></span>
+                <span>Аналитика для реального ритейла</span>
+            </div>
+            <h1 class="hero-title">Самир — Дата / Бизнес / Маркетинговый аналитик</h1>
+            <p class="hero-subtitle">
+                Строю аналитические решения на стыке бизнеса и данных.
+            </p>
+
+            <div class="hero-tags">
+                <span class="tag">Power BI · DAX · OLAP</span>
+                <span class="tag">Python · pandas</span>
+                <span class="tag">SQL · MSSQL</span>
+            </div>
+
+            <div class="hero-actions">
+                <button class="btn-primary" type="button" onclick="document.querySelector('#projects').scrollIntoView({behavior:'smooth'})">
+                    Смотреть проекты
+                    <span>↘</span>
+                </button>
+                <button class="btn-secondary" type="button" onclick="document.querySelector('#contacts').scrollIntoView({behavior:'smooth'})">
+                    Связаться
+                </button>
+            </div>
+        </div>
+
+        <aside class="hero-secondary">
+            <div class="hero-card">
+                <div class="hero-card-title">Фокус сейчас</div>
+                <div class="hero-card-sub">Розничная сеть · гипермаркеты</div>
+                <div class="hero-pill-row">
+                    <span class="pill">Dynamic Pricing (KVI / EDLP / EDPP)</span>
+                    <span class="pill">Факторный анализ продаж и маржи</span>
+                    <span class="pill">Операционная аналитика</span>
+                </div>
+            </div>
+            <div class="hero-card">
+                <div class="hero-card-title">Технологии</div>
+                <div class="hero-card-sub">С которыми работаю каждый день</div>
+                <div class="hero-pill-row">
+                    <span class="pill">Power BI · DAX · Power Query</span>
+                    <span class="pill">Python · pandas · numpy</span>
+                    <span class="pill">SQL · MSSQL · OLAP</span>
+                    <span class="pill">Excel · автоматизация</span>
+                    <span class="pill">Figma · макеты</span>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+        <div class="section-header">
+            <h2 class="section-title">Обо мне</h2>
+            <p class="section-subtitle">Коротко: бизнес-вопрос → данные → решение, которое реально используют</p>
+        </div>
+        <article class="about">
+            <p>
+                Я аналитик данных / BI-аналитик, который работает с реальными бизнес-процессами в крупной розничной
+                сети О'КЕЙ (формат гипермаркетов).
+            </p>
+            <p>
+                В проектах совмещаю Excel, Power BI, Python и SQL: переношу сложные расчёты и факторные модели из
+                Excel в Python, строю дашборды на OLAP-кубах, помогаю бизнесу принимать решения на основе данных,
+                а не интуиции.
+            </p>
+            <p>
+                На данный момент я занимаю позицию младшего бизнес-аналитика в отделе Проектный офис.
+                Отвечаю за проекты отделов КД (коммерческий департамент), Маркетинг и Качество.
+                Активно участвую в динамическом ценообразовании и монетизации данных.
+            </p>
+        </article>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+        <div class="section-header">
+            <h2 class="section-title">Навыки</h2>
+            <p class="section-subtitle">Инструменты, с которыми я работаю</p>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-card-title">Data & BI</div>
+                <div class="skill-card-sub">Данные, модели и визуализация</div>
+                <ul class="skill-list">
+                    <li>Power BI: DAX-модели, кастомные календари, работа с OLAP</li>
+                    <li>Python: pandas, numpy, автоматизация расчётов, отчёты</li>
+                    <li>SQL: MSSQL, OLAP-кубы, витрины, сложные запросы</li>
+                    <li>Excel: продвинутые формулы, сводные, макро-подход</li>
+                    <li>Figma: отрисовка макетов, создание презентаций</li>
+                    <li>BPMN 2.0, IDEF0: моделирование бизнес-процессов</li>
+                </ul>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-card-title">Retail & Pricing</div>
+                <div class="skill-card-sub">Ритейл и ценообразование</div>
+                <ul class="skill-list">
+                    <li>KVI / EDLP / EDPP логики, ценовые сегменты</li>
+                    <li>Факторный анализ продаж, маржи, traffic / mix / price effects</li>
+                    <li>Аналитика печати ценников, контроль план/факт</li>
+                    <li>Классификация ассортимента, роли SKU в корзине</li>
+                </ul>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-card-title">Engineering & Projects</div>
+                <div class="skill-card-sub">Инженерия и работа с проектами</div>
+                <ul class="skill-list">
+                    <li>GitHub, GitHub Pages, базовый Docker / Streamlit / Dash</li>
+                    <li>Документация, постановка задач, работа с бизнес-заказчиками</li>
+                    <li>Презентации, отчёты для руководства</li>
+                    <li>Научные и учебные проекты по аналитике и ИИ</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+        <div class="section-header">
+            <h2 class="section-title">Проекты</h2>
+            <p class="section-subtitle">Подборка рабочих и учебных задач, которые отражают мой стек</p>
+        </div>
+
+        <div class="projects-grid">
+            <!-- PROJECT 1 -->
+            <article class="project-card">
+                <div class="project-badge-row">
+                    <span class="badge">Dynamic Pricing</span>
+                    <span class="badge badge-outline">Python · Power BI · SQL</span>
+                </div>
+                <h3 class="project-title">Внутренний модуль динамического ценообразования (KVI / EDLP / EDPP)</h3>
+                <p class="project-meta">Розничная сеть · гипермаркеты</p>
+                <p class="project-desc">
+                    Построил логику динамического ценообразования: классификация ассортимента, выделение KVI,
+                    сегментация цен, правила реакции на конкурентов (нет конкурентов, 1–2 конкурента, 3+ и т. д.).
+                    Реализовал расчёты в Python и интеграцию с BI-отчётностью.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Ассортиментная матрица</span>
+                    <span class="tag">Правила ценообразования</span>
+                    <span class="tag">Сравнение с Imprice</span>
+                </div>
+                <div class="project-footer">
+                    <span>Фокус: автоматизация и прозрачность правил ценообразования</span>
+                </div>
+            </article>
+
+            <!-- PROJECT 2 -->
+            <article class="project-card">
+                <div class="project-badge-row">
+                    <span class="badge">Factor Analysis</span>
+                    <span class="badge badge-outline">Python · Excel parity</span>
+                </div>
+                <h3 class="project-title">Факторный анализ продаж и маржи (автоматизация Excel-модели)</h3>
+                <p class="project-meta">Python-скрипт + дашборд</p>
+                <p class="project-desc">
+                    Перенёс сложную Excel-модель факторного анализа в Python, достигнув совпадения расчётов с Excel
+                    на уровне ≈99%. Реализовал выгрузку в формат, удобный для Power BI, с фильтрами по ролям SKU,
+                    форматам магазинов и периодам.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Traffic · Mix · Price · Margin</span>
+                    <span class="tag">Оптимизация расчётов</span>
+                    <span class="tag">Подготовка к BI</span>
+                </div>
+                <div class="project-footer">
+                    <span>Результат: ускорение расчётов и исчезновение ручной рутины</span>
+                </div>
+            </article>
+
+            <!-- PROJECT 3 -->
+            <article class="project-card">
+                <div class="project-badge-row">
+                    <span class="badge">Print Analytics</span>
+                    <span class="badge badge-outline">Power BI · OLAP</span>
+                </div>
+                <h3 class="project-title">Дашборд печати ценников (план / факт / отклонения)</h3>
+                <p class="project-meta">Power BI · MSSQL / OLAP</p>
+                <p class="project-desc">
+                    Построил дашборд контроля печати ценников по магазинам: связал план печати, фактические
+                    лог-данные принтеров и данные прошлых периодов. Реализовал метрики план/факт, отклонение от
+                    плана, прирост/просадка к прошлой неделе и году.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Printer logs</span>
+                    <span class="tag">Time series</span>
+                    <span class="tag">Операционная эффективность</span>
+                </div>
+                <div class="project-footer">
+                    <span>Результат: прозрачность нагрузки и точности печати ценников</span>
+                </div>
+            </article>
+
+            <!-- PROJECT 4 -->
+            <article class="project-card">
+                <div class="project-badge-row">
+                    <span class="badge">Side / Academic</span>
+                    <span class="badge badge-outline">Python · Telegram</span>
+                </div>
+                <h3 class="project-title">Учебные и pet-проекты: Telegram-боты, исследовательские работы</h3>
+                <p class="project-meta">Pet-проекты · академические задачи</p>
+                <p class="project-desc">
+                    Работаю над аналитическими инструментами для маркетинга и ценообразования,
+                    активно изучаю научные работы по аналитике и ИИ в ритейле. Использую их как полигон для новых идей,
+                    которые затем можно перенести в продакшн.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Telegram-боты</span>
+                    <span class="tag">Marketing analytics</span>
+                    <span class="tag">Научные статьи</span>
+                </div>
+                <div class="project-footer">
+                    <span>Фокус: быстро проверять идеи и гипотезы</span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section class="section" id="contacts">
+        <div class="section-header">
+            <h2 class="section-title">Контакты</h2>
+            <p class="section-subtitle">Лучше всего — написать в Telegram или на почту</p>
+        </div>
+
+        <div class="contacts-card">
+            <div>
+                <p class="contact-text-main">
+                    Открыт к предложениям по аналитике и BI-проектам
+                </p>
+                <p class="contact-text-sub">
+                    Если у вас есть задача, где нужны данные, структурное мышление и аккуратная реализация — напишите мне.
+                </p>
+                <div class="chip-row">
+                    <span class="chip">Проекты в ритейле</span>
+                    <span class="chip">BI / Power BI</span>
+                    <span class="chip">Python-автоматизация</span>
+                </div>
+            </div>
+            <div>
+                <ul class="contact-list">
+                    <li>
+                        <div class="contact-label">Telegram</div>
+                        <div class="contact-value">
+                            <a href="https://t.me/samirchikk7" target="_blank" rel="noreferrer">@samirchikk7</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">
+                            <a href="mailto:musabaliev@list.ru">musabaliev@list.ru</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="contact-label">GitHub</div>
+                        <div class="contact-value">
+                            <!-- ЗАМЕНИ на свой GitHub, когда будешь готов -->
+                            <a href="https://github.com/your-github" target="_blank" rel="noreferrer">github.com/your-github</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span>© <span id="year"></span> Самир · Data / BI Analyst</span>
+    </footer>
+</div>
+
+<script>
+    // Год в футере
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Тема
+    const root = document.documentElement;
+    const toggleBtn = document.getElementById("theme-toggle");
+    const themeIcon = document.getElementById("theme-icon");
+    const themeLabel = document.getElementById("theme-label");
+
+    function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        if (theme === "dark") {
+            themeIcon.textContent = "🌙";
+            themeLabel.textContent = "Тёмная";
+        } else {
+            themeIcon.textContent = "🌞";
+            themeLabel.textContent = "Светлая";
+        }
+    }
+
+    // Инициализация темы: localStorage → prefers-color-scheme → light
+    (function initTheme() {
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark" || stored === "light") {
+            applyTheme(stored);
+        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            applyTheme("dark");
+        } else {
+            applyTheme("light");
+        }
+    })();
+
+    toggleBtn.addEventListener("click", () => {
+        const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+        const next = current === "dark" ? "light" : "dark";
+        applyTheme(next);
+    });
+</script>
+</body>
+</html>
