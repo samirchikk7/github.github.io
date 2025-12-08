@@ -58,6 +58,8 @@
             max-width: 1080px;
             margin: 0 auto;
             padding: 20px 16px 40px;
+            position: relative;
+            z-index: 2; /* чтобы контент был над spotlight */
         }
 
         @media (min-width: 768px) {
@@ -602,9 +604,37 @@
         .mono {
             font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
+
+        /* 🔆 SPOTLIGHT ЭФФЕКТ */
+
+        #spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 220px;
+            pointer-events: none;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.28), transparent 65%);
+            mix-blend-mode: soft-light;
+            filter: blur(40px);
+            opacity: 0.5;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        [data-theme="dark"] #spotlight {
+            background: radial-gradient(circle, rgba(96,165,250,0.18), transparent 70%);
+            opacity: 0.35;
+        }
     </style>
 </head>
 <body>
+
+<!-- spotlight-подсветка -->
+<div id="spotlight"></div>
+
 <div class="page">
     <!-- NAVBAR -->
     <header class="nav">
@@ -789,7 +819,6 @@
                 </div>
             </article>
 
-
             <!-- PROJECT 2 -->
             <article class="project-card">
                 <div class="project-badge-row">
@@ -842,7 +871,6 @@
                         <span>↗</span>
                     </a>
                 </div>
-
             </article>
 
             <!-- PROJECT 4 -->
@@ -870,7 +898,6 @@
                         <span>↗</span>
                     </a>
                 </div>
-
             </article>
         </div>
     </section>
@@ -913,8 +940,7 @@
                     <li>
                         <div class="contact-label">GitHub</div>
                         <div class="contact-value">
-                            <!-- ЗАМЕНИ на свой GitHub, когда будешь готов -->
-                            <a href="https://github.com/samirchikk7" target="_blank" rel="noreferrer">samirchikk7</a>
+                            <a href="https://github.com/your-github" target="_blank" rel="noreferrer">github.com/your-github</a>
                         </div>
                     </li>
                 </ul>
@@ -949,7 +975,7 @@
         }
     }
 
-    // Инициализация темы: localStorage → prefers-color-scheme → light
+    // Инициализация темы
     (function initTheme() {
         const stored = localStorage.getItem("theme");
         if (stored === "dark" || stored === "light") {
@@ -966,12 +992,23 @@
         const next = current === "dark" ? "light" : "dark";
         applyTheme(next);
     });
+
+    // 🔆 Spotlight-эффект
+    const spotlight = document.getElementById("spotlight");
+
+    document.addEventListener("mousemove", (e) => {
+        spotlight.style.top = `${e.clientY}px`;
+        spotlight.style.left = `${e.clientX}px`;
+    });
+
+    document.addEventListener("mouseleave", () => {
+        spotlight.style.opacity = "0";
+    });
+
+    document.addEventListener("mouseenter", () => {
+        const theme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+        spotlight.style.opacity = theme === "dark" ? "0.35" : "0.5";
+    });
 </script>
 </body>
 </html>
-
-
-
-
-
-
