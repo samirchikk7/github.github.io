@@ -39,10 +39,11 @@
 
         body {
             font-family: var(--font-main);
-            background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 55%), var(--bg);
+            background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.10), transparent 60%), var(--bg);
             color: var(--text);
             line-height: 1.6;
-        }
+            transition: background 0.2s ease-out;
+        }    
 
         a {
             color: inherit;
@@ -1009,8 +1010,21 @@
         const theme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
         spotlight.style.opacity = theme === "dark" ? "0.35" : "0.5";
     });
+
+    // GRADIENT WAVE EFFECT
+document.addEventListener("mousemove", (e) => {
+    const x = (e.clientX / window.innerWidth) * 100;
+    const y = (e.clientY / window.innerHeight) * 100;
+
+    document.body.style.background = `
+        radial-gradient(circle at ${x}% ${y}%, rgba(37, 99, 235, 0.12), transparent 60%),
+        var(--bg)
+    `;
+});
+
 </script>
 </body>
 </html>
+
 
 
