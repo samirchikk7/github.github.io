@@ -618,29 +618,6 @@
             font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
 
-        /* 🔆 SPOTLIGHT ЭФФЕКТ */
-
-        #spotlight {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 220px;
-            height: 220px;
-            pointer-events: none;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.28), transparent 65%);
-            mix-blend-mode: soft-light;
-            filter: blur(40px);
-            opacity: 0.5;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-            z-index: 50;
-        }
-
-        [data-theme="dark"] #spotlight {
-            background: radial-gradient(circle, rgba(96,165,250,0.18), transparent 70%);
-            opacity: 0.35;
-        }
     </style>
 </head>
 <body>
@@ -1081,6 +1058,7 @@ requestAnimationFrame(animateGradient);
 </script>
 </body>
 </html>
+
 
 
 
