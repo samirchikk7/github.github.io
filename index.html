@@ -43,7 +43,19 @@
             color: var(--text);
             line-height: 1.6;
             transition: background 0.2s ease-out;
-        }    
+        } 
+
+        body {
+            font-family: var(--font-main);
+    /* базовый фон, который будет «оживляться» скриптом */
+            background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.12), transparent 60%),
+                        radial-gradient(circle at 10% 80%, rgba(56, 189, 248, 0.10), transparent 65%),
+                        var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background 0.2s ease-out;
+        }
+
 
         a {
             color: inherit;
@@ -1012,19 +1024,64 @@
     });
 
     // GRADIENT WAVE EFFECT
+// GRADIENT WAVE: две волны + «дыхание» фона
+let mouseX = 0.5;
+let mouseY = 0.3;
+let targetMouseX = 0.5;
+let targetMouseY = 0.3;
+let t = 0;
+
+// Обновляем цель по движению мыши
 document.addEventListener("mousemove", (e) => {
-    const x = (e.clientX / window.innerWidth) * 100;
-    const y = (e.clientY / window.innerHeight) * 100;
+    targetMouseX = e.clientX / window.innerWidth;
+    targetMouseY = e.clientY / window.innerHeight;
+});
+
+// Плавная анимация через requestAnimationFrame
+function animateGradient() {
+    t += 0.01; // время для «дыхания»
+
+    // Плавно тянем фактическое положение к целевому (чтоб не дёргалось)
+    mouseX += (targetMouseX - mouseX) * 0.08;
+    mouseY += (targetMouseY - mouseY) * 0.08;
+
+    // Базовые координаты двух волн
+    const baseX1 = 0.5;  // верхняя волна
+    const baseY1 = 0.2;
+    const baseX2 = 0.1;  // нижняя волна
+    const baseY2 = 0.8;
+
+    // Смещение от мышки (эффект «следования»)
+    const offsetX = (mouseX - 0.5) * 0.25; // чем меньше коэффициент, тем мягче
+    const offsetY = (mouseY - 0.5) * 0.25;
+
+    // «Дыхание» — лёгкое колебание синусами
+    const breathX = 0.05 * Math.sin(t * 0.7);
+    const breathY = 0.04 * Math.cos(t * 0.9);
+
+    const x1 = (baseX1 + offsetX + breathX) * 100;
+    const y1 = (baseY1 + offsetY + breathY) * 100;
+
+    const x2 = (baseX2 - offsetX + breathX * 0.7) * 100;
+    const y2 = (baseY2 - offsetY + breathY * 0.7) * 100;
 
     document.body.style.background = `
-        radial-gradient(circle at ${x}% ${y}%, rgba(37, 99, 235, 0.12), transparent 60%),
+        radial-gradient(circle at ${x1}% ${y1}%, rgba(37, 99, 235, 0.13), transparent 60%),
+        radial-gradient(circle at ${x2}% ${y2}%, rgba(56, 189, 248, 0.10), transparent 65%),
         var(--bg)
     `;
+
+    requestAnimationFrame(animateGradient);
+}
+
+requestAnimationFrame(animateGradient);
+
 });
 
 </script>
 </body>
 </html>
+
 
 
 
