@@ -62,7 +62,10 @@
             max-width: 1080px;
             margin: 0 auto;
             padding: 20px 16px 40px;
-        }
+            position: relative;
+            z-index: 1; /* контент над звёздами */
+}
+
 
         @media (min-width: 768px) {
             .page {
@@ -606,9 +609,21 @@
         .mono {
             font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
+        /* Звездопад на фоне */
+        #stars {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;        /* под .page, над фоном body */
+            display: block;
+        }
+
     </style>
 </head>
 <body>
+<canvas id="stars"></canvas>
 <div class="page">
     <!-- NAVBAR -->
     <header class="nav">
@@ -1018,9 +1033,81 @@
 
     requestAnimationFrame(animateGradient);
 
+    // ЗВЕЗДОПАД
+(function () {
+    const canvas = document.getElementById("stars");
+    if (!canvas || !canvas.getContext) return;
+
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+    const STAR_COUNT = 60;
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    function createStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: 1 + Math.random() * 1.5,
+                speedY: 30 + Math.random() * 70,   // пикс/сек
+                speedX: (Math.random() - 0.5) * 20 // лёгкое смещение по X
+            });
+        }
+    }
+
+    createStars();
+
+    let lastTime = 0;
+
+    function getStarColor() {
+        const theme = document.documentElement.getAttribute("data-theme");
+        // в тёмной теме посветлее
+        return theme === "dark"
+            ? "rgba(248, 250, 252, 0.75)"
+            : "rgba(15, 23, 42, 0.45)";
+    }
+
+    function animateStars(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        const dt = (timestamp - lastTime) / 1000;
+        lastTime = timestamp;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = getStarColor();
+
+        for (const s of stars) {
+            s.y += s.speedY * dt;
+            s.x += s.speedX * dt;
+
+            if (s.y - s.size > canvas.height) {
+                s.y = -s.size;
+                s.x = Math.random() * canvas.width;
+            }
+
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        requestAnimationFrame(animateStars);
+    }
+
+    requestAnimationFrame(animateStars);
+})();
+
+
 </script>
 </body>
 </html>
+
 
 
 
