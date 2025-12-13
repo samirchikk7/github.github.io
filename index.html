@@ -40,7 +40,6 @@
 
         body {
             font-family: var(--font-main);
-    /* стартовый фон, дальше его полностью перезапишет JS */
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
@@ -63,7 +62,7 @@
             margin: 0 auto;
             padding: 20px 16px 40px;
             position: relative;
-            z-index: 1; /* контент над звёздами */
+            z-index: 1; 
 }
 
 
@@ -72,8 +71,6 @@
                 padding: 28px 24px 60px;
             }
         }
-
-        /* NAVBAR */
 
         .nav {
             display: flex;
@@ -99,7 +96,7 @@
         }
 
         .nav-logo {
-            width: 48px;              /* чуть больше, чтобы лицо не было слишком зажато */
+            width: 48px;              
             height: 48px;
             border-radius: 999px;
             overflow: hidden;
@@ -107,12 +104,11 @@
             box-shadow: 0 0 8px rgba(0,0,0,0.18);
         }
 
-/* тут двигаем «фокус» вверх */
         .nav-logo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: 50% 20%;  /* 50% по горизонтали, 20% по вертикали (чуть выше центра) */
+            object-position: 50% 20%;  
         }
 
 
@@ -191,7 +187,7 @@
             }
         }
 
-        /* HERO */
+
 
         .hero {
             margin-top: 22px;
@@ -361,8 +357,7 @@
             }
         }
 
-        /* SECTIONS */
-
+       
         .section {
             margin-bottom: 32px;
         }
@@ -385,7 +380,6 @@
             color: var(--text-muted);
         }
 
-        /* ABOUT */
 
         .about {
             border-radius: var(--radius-lg);
@@ -400,7 +394,7 @@
             margin-top: 8px;
         }
 
-        /* SKILLS */
+        
 
         .skills-grid {
             display: grid;
@@ -534,7 +528,7 @@
             gap: 4px;
         }
 
-        /* CONTACTS */
+        
 
         .contacts-card {
             border-radius: var(--radius-lg);
@@ -609,14 +603,14 @@
         .mono {
             font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
-        /* Звездопад на фоне */
+        
         #stars {
             position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;        /* под .page, над фоном body */
+            z-index: 0;        
             display: block;
         }
 
@@ -651,7 +645,7 @@
         </div>
     </header>
 
-    <!-- HERO -->
+   
     <section class="hero" id="top">
         <div class="hero-main">
             <div class="hero-eyebrow">
@@ -704,7 +698,6 @@
         </aside>
     </section>
 
-    <!-- ABOUT -->
     <section class="section" id="about">
         <div class="section-header">
             <h2 class="section-title">Обо мне</h2>
@@ -722,13 +715,10 @@
             </p>
             <p>
                 На данный момент я занимаю позицию младшего бизнес-аналитика в отделе Проектный офис.
-                Отвечаю за проекты отделов КД (коммерческий департамент), Маркетинг и Качество.
-                Активно участвую в динамическом ценообразовании и монетизации данных.
             </p>
         </article>
     </section>
 
-    <!-- SKILLS -->
     <section class="section" id="skills">
         <div class="section-header">
             <h2 class="section-title">Навыки</h2>
@@ -742,8 +732,8 @@
                 <ul class="skill-list">
                     <li>Power BI: DAX-модели, кастомные календари, работа с OLAP</li>
                     <li>Python: pandas, numpy, автоматизация расчётов, отчёты</li>
-                    <li>SQL: MSSQL, OLAP-кубы, витрины, сложные запросы</li>
-                    <li>Excel: продвинутые формулы, сводные, макро-подход</li>
+                    <li>SQL: MSSQL, витрины, сложные запросы</li>
+                    <li>Excel: продвинутые формулы, сводные, работа с , OLAP-кубами</li>
                     <li>Figma: отрисовка макетов, создание презентаций</li>
                     <li>BPMN 2.0, IDEF0: моделирование бизнес-процессов</li>
                 </ul>
@@ -753,10 +743,8 @@
                 <div class="skill-card-title">Retail & Pricing</div>
                 <div class="skill-card-sub">Ритейл и ценообразование</div>
                 <ul class="skill-list">
-                    <li>KVI / EDLP / EDPP логики, ценовые сегменты</li>
                     <li>Факторный анализ продаж, маржи, traffic / mix / price effects</li>
                     <li>Аналитика по печати, контроль план/факт</li>
-                    <li>Классификация ассортимента, роли SKU в корзине</li>
                 </ul>
             </div>
 
@@ -765,9 +753,9 @@
                 <div class="skill-card-sub">Инженерия и работа с проектами</div>
                 <ul class="skill-list">
                     <li>GitHub, GitHub Pages, базовый Docker / Streamlit / Dash</li>
-                    <li>Документация, постановка задач, работа с бизнес-заказчиками</li>
-                    <li>Презентации, отчёты для руководства</li>
-                    <li>Научные и учебные проекты по аналитике и ИИ</li>
+                    <li>Документация, постановка задач</li>
+                    <li>Презентации, отчёты </li>
+                    <li>Учебные проекты по аналитике и ИИ</li>
                 </ul>
             </div>
         </div>
@@ -787,21 +775,24 @@
                     <span class="badge">Dynamic Pricing</span>
                     <span class="badge badge-outline">Python · Power BI · SQL</span>
                 </div>
-                <h3 class="project-title">Внутренний модуль динамического ценообразования (KVI / EDLP / EDPP)</h3>
+                <h3 class="project-title">Проект динамического ценообразования </h3>
                 <p class="project-meta">Розничная сеть · гипермаркеты</p>
                 <p class="project-desc">
-                    Построил логику динамического ценообразования: классификация ассортимента, выделение KVI,
-                    сегментация цен, правила реакции на конкурентов (нет конкурентов, 1–2 конкурента, 3+ и т. д.).
-                    Реализовал расчёты в Python и интеграцию с BI-отчётностью.
+                    Участие в проекте динамического ценообразования: 
+                    · Поиск инсайтов
+                    · Трансформация данных
+                    · Перенёс сложную Excel-модель факторного анализа в Python, достигнув совпадения расчётов с Excel
+                    на уровне ≈99%. Реализовал выгрузку в формат, удобный для Power BI, с фильтрами по ролям SKU,
+                    форматам магазинов и периодам.
                 </p>
                 <div class="project-tags">
                     <span class="tag">Ассортиментная матрица</span>
                     <span class="tag">Правила ценообразования</span>
-                    <span class="tag">Сравнение с Imprice</span>
+                    <span class="tag">Сравнение с коробочным решение</span>
                 </div>
                 <div class="project-footer">
                     <span>Фокус: автоматизация и прозрачность правил ценообразования</span>
-                    <a class="project-link" href="projects/dynamic-pricing.html">
+                    <a class="project-link" href="projects/-dynamic-pricing.html">
                         Подробнее
                         <span>↗</span>
                     </a>
@@ -814,12 +805,11 @@
                     <span class="badge">Factor Analysis</span>
                     <span class="badge badge-outline">Python · Excel parity</span>
                 </div>
-                <h3 class="project-title">Факторный анализ продаж и маржи (автоматизация Excel-модели)</h3>
-                <p class="project-meta">Python-скрипт + дашборд</p>
+                <h3 class="project-title">Монетизация данных</h3>
+                <p class="project-meta">Работа с кубами</p>
                 <p class="project-desc">
-                    Перенёс сложную Excel-модель факторного анализа в Python, достигнув совпадения расчётов с Excel
-                    на уровне ≈99%. Реализовал выгрузку в формат, удобный для Power BI, с фильтрами по ролям SKU,
-                    форматам магазинов и периодам.
+                    · Выгрузка данных
+                    · Написание бизнес требований
                 </p>
                 <div class="project-tags">
                     <span class="tag">Traffic · Mix · Price · Margin</span>
@@ -827,8 +817,8 @@
                     <span class="tag">Подготовка к BI</span>
                 </div>
                 <div class="project-footer">
-                    <span>Результат: ускорение расчётов и исчезновение ручной рутины</span>
-                    <a class="project-link" href="projects/factor-analysis.html">
+                    <span>Результат: · четкие требования к системам · готовые данные для анализа</span>
+                    <a class="project-link" href="projects/-factor-analysis.html">
                         Подробнее
                         <span>↗</span>
                     </a>
@@ -855,7 +845,7 @@
                 </div>
                 <div class="project-footer">
                     <span>Результат: прозрачность нагрузки и точности печати</span>
-                    <a class="project-link" href="projects/print-analytics.html">
+                    <a class="project-link" href="projects/-print-analytics.html">
                         Подробнее
                         <span>↗</span>
                     </a>
@@ -917,19 +907,19 @@
                     <li>
                         <div class="contact-label">Telegram</div>
                         <div class="contact-value">
-                            <a href="https://t.me/samirchikk7" target="_blank" rel="noreferrer">@samirchikk7</a>
+                            <a href="https://t.me/" target="_blank" rel="noreferrer">@-</a>
                         </div>
                     </li>
                     <li>
                         <div class="contact-label">Email</div>
                         <div class="contact-value">
-                            <a href="mailto:musabaliev@list.ru">musabaliev@list.ru</a>
+                            <a href="mailto:">-</a>
                         </div>
                     </li>
                     <li>
                         <div class="contact-label">GitHub</div>
                         <div class="contact-value">
-                            <a href="https://github.com/samirchikk7" target="_blank" rel="noreferrer">github.com/samirchikk7</a>
+                            <a href="https://github.com/" target="_blank" rel="noreferrer">github.com/-</a>
                         </div>
                     </li>
                 </ul>
@@ -1107,6 +1097,7 @@
 </script>
 </body>
 </html>
+
 
 
 
