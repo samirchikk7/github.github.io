@@ -1,337 +1,272 @@
 <!DOCTYPE html>
 <html lang="ru" data-theme="light">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Print Analytics — кейс · Самир Мусабалиев</title>
-    <style>
-        /* тот же набор переменных и стилей, как в factor-analysis.html */
-        :root {
-            --bg: #f5f5f7;
-            --bg-alt: #ffffff;
-            --text: #111111;
-            --text-muted: #555555;
-            --accent: #2563eb;
-            --accent-soft: rgba(37, 99, 235, 0.08);
-            --border: #e0e0e7;
-            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
-            --radius-lg: 24px;
-            --radius-md: 18px;
-            --transition-fast: 0.2s ease;
-            --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        }
-        [data-theme="dark"] {
-            --bg: #020617;
-            --bg-alt: #020617;
-            --text: #f9fafb;
-            --text-muted: #9ca3af;
-            --accent: #60a5fa;
-            --accent-soft: rgba(96, 165, 250, 0.09);
-            --border: #1f2937;
-            --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: var(--font-main);
-            background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 55%), var(--bg);
-            color: var(--text); line-height: 1.6;
-        }
-        a { color: inherit; text-decoration: none; }
-        .page { max-width: 900px; margin: 0 auto; padding: 20px 16px 40px; }
-        @media (min-width: 768px) { .page { padding: 28px 24px 60px; } }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Print Analytics — Самир Мусабалиев</title>
 
-        .nav {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 16px; padding: 10px 14px; margin-bottom: 24px;
-            border-radius: 999px;
-            background: color-mix(in srgb, var(--bg-alt) 80%, transparent);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(18px);
-            position: sticky; top: 12px; z-index: 20;
-        }
-        .nav-left { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-        .nav-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--accent); }
-        .nav-main { font-weight: 600; }
-        .nav-sub { font-size: 11px; color: var(--text-muted); }
-        .nav-right { display: flex; align-items: center; gap: 8px; }
-        .btn-ghost {
-            border-radius: 999px; border: 1px solid var(--border);
-            padding: 4px 10px; font-size: 11px;
-            display: inline-flex; align-items: center; gap: 6px;
-            background: color-mix(in srgb, var(--bg-alt) 75%, transparent);
-            cursor: pointer;
-            transition: background var(--transition-fast), transform var(--transition-fast),
-                        border-color var(--transition-fast), box-shadow var(--transition-fast);
-        }
-        .btn-ghost:hover {
-            transform: translateY(-1px);
-            border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
-        }
-        .btn-ghost span.icon { font-size: 14px; }
+  <style>
+    :root{--bg:#f5f5f7;--bg-alt:#fff;--text:#111;--text-muted:#555;--accent:#2563eb;--accent-soft:rgba(37,99,235,.08);--border:#e0e0e7;--shadow-soft:0 18px 45px rgba(15,23,42,.08);--radius-lg:24px;--radius-md:18px;--transition-fast:.2s ease;--font-main:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+    [data-theme="dark"]{--bg:#020617;--bg-alt:#020617;--text:#f9fafb;--text-muted:#9ca3af;--accent:#60a5fa;--accent-soft:rgba(96,165,250,.12);--border:#1f2937;--shadow-soft:0 18px 45px rgba(0,0,0,.7);}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font-main);background:var(--bg);color:var(--text);line-height:1.6;transition:background .15s ease-out;}
+    a{color:inherit;text-decoration:none;}
+    #stars{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;display:block;}
+    .page{max-width:1080px;margin:0 auto;padding:20px 16px 40px;position:relative;z-index:1;}
+    @media (min-width:768px){.page{padding:28px 24px 60px;}}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;margin-bottom:24px;border-radius:999px;background:color-mix(in srgb,var(--bg-alt) 80%,transparent);border:1px solid var(--border);box-shadow:var(--shadow-soft);backdrop-filter:blur(18px);position:sticky;top:12px;z-index:20;}
+    .nav-left{display:flex;align-items:center;gap:10px;}
+    .nav-logo{width:48px;height:48px;border-radius:999px;overflow:hidden;border:2px solid var(--border);box-shadow:0 0 8px rgba(0,0,0,.18);}
+    .nav-logo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;}
+    .nav-title{display:flex;flex-direction:column;font-size:13px;}
+    .nav-title-main{font-weight:600;}
+    .nav-title-sub{font-size:11px;color:var(--text-muted);}
+    .nav-links{display:none;gap:14px;font-size:13px;}
+    .nav-links a{padding:6px 10px;border-radius:999px;color:var(--text-muted);border:1px solid transparent;transition:background var(--transition-fast),color var(--transition-fast),border-color var(--transition-fast);}
+    .nav-links a:hover{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 12%,transparent);}
+    @media (min-width:768px){.nav-links{display:flex;}}
+    .btn-ghost{border-radius:999px;border:1px solid var(--border);padding:4px 10px;font-size:11px;display:inline-flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--bg-alt) 75%,transparent);cursor:pointer;transition:background var(--transition-fast),transform var(--transition-fast),border-color var(--transition-fast),box-shadow var(--transition-fast);}
+    .btn-ghost:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--accent) 25%,var(--border));box-shadow:0 10px 24px rgba(15,23,42,.18);}
+    .btn-ghost span.icon{font-size:14px;}
+    @media (min-width:768px){.btn-ghost{font-size:12px;padding:6px 12px;}}
 
-        .header { margin-bottom: 26px; }
-        .breadcrumbs { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
-        .breadcrumbs a { color: var(--text-muted); }
-        .breadcrumbs .sep { margin: 0 4px; }
-        .title { font-size: clamp(24px, 3vw, 28px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
-        .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
-        .meta-row { display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px; }
-        .meta-pill {
-            padding: 4px 8px; border-radius: 999px;
-            border: 1px solid var(--border);
-            background: color-mix(in srgb, var(--bg-alt) 85%, transparent);
-            color: var(--text-muted);
-        }
-
-        .layout { display: grid; gap: 16px; }
-        @media (min-width: 800px) {
-            .layout { grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); align-items: flex-start; }
-        }
-
-        .card {
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            background: var(--bg-alt);
-            box-shadow: var(--shadow-soft);
-            padding: 16px 16px 14px;
-            font-size: 14px;
-        }
-        .card h2 { font-size: 16px; margin-bottom: 8px; }
-        .card section + section { margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--border); }
-        .card p + p { margin-top: 6px; }
-        .highlight {
-            padding: 8px 10px; border-radius: 12px;
-            border: 1px dashed var(--border);
-            background: var(--accent-soft);
-            font-size: 13px; margin-top: 8px;
-        }
-        .list { margin-top: 6px; padding-left: 16px; font-size: 13px; color: var(--text-muted); }
-        .list li + li { margin-top: 4px; }
-
-        .sidebar-card {
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            background: var(--bg-alt);
-            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
-            padding: 12px 12px 10px;
-            font-size: 13px;
-        }
-        .sidebar-card + .sidebar-card { margin-top: 10px; }
-        .sidebar-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-        .sidebar-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
-        .sidebar-list { list-style: none; font-size: 12px; color: var(--text-muted); }
-        .sidebar-list li::before {
-            content: "•"; margin-right: 6px; font-size: 10px;
-            vertical-align: middle; color: var(--accent);
-        }
-
-        footer { margin-top: 26px; font-size: 11px; color: var(--text-muted); text-align: center; }
-    </style>
+    .hero{border-radius:var(--radius-lg);border:1px solid var(--border);background:radial-gradient(circle at top left,rgba(37,99,235,.14),transparent 55%),var(--bg-alt);box-shadow:var(--shadow-soft);padding:18px 18px 16px;margin-bottom:18px;}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:4px 10px;border-radius:999px;font-size:11px;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--border));background:var(--accent-soft);color:color-mix(in srgb,var(--accent) 80%,var(--text));margin-bottom:10px;}
+    .title{font-size:clamp(22px,2.6vw,30px);font-weight:700;letter-spacing:-.02em;margin-bottom:8px;}
+    .subtitle{color:var(--text-muted);font-size:14px;max-width:860px;}
+    .meta{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:10px;font-size:12px;color:var(--text-muted);}
+    .pill{padding:4px 10px;border-radius:999px;border:1px dashed var(--border);background:color-mix(in srgb,var(--bg) 85%,transparent);}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+    .chip{font-size:11px;padding:4px 9px;border-radius:999px;border:1px solid var(--border);background:color-mix(in srgb,var(--bg) 70%,transparent);color:var(--text-muted);}
+    .grid{display:grid;gap:14px;margin-top:14px;}
+    @media (min-width:900px){.grid{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);}}
+    .card{border-radius:var(--radius-md);border:1px solid var(--border);background:var(--bg-alt);box-shadow:0 14px 35px rgba(15,23,42,.16);padding:14px 14px 12px;}
+    .card h3{font-size:14px;font-weight:600;margin-bottom:6px;}
+    .list{list-style:none;margin-top:10px;font-size:13px;color:var(--text-muted);}
+    .list li+li{margin-top:8px;}
+    .list li::before{content:"•";margin-right:8px;color:var(--accent);}
+    .section{margin-top:14px;}
+    .section h2{font-size:16px;font-weight:700;margin:10px 0 8px;}
+    .section .text{font-size:14px;color:var(--text-muted);}
+    .mock{margin-top:10px;border-radius:var(--radius-md);border:1px dashed var(--border);background:color-mix(in srgb,var(--bg-alt) 85%,transparent);padding:12px;color:var(--text-muted);font-size:13px;}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+    .btn-primary{font-size:13px;padding:9px 16px;border-radius:999px;border:none;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 16px 40px rgba(37,99,235,.45);transition:transform var(--transition-fast),box-shadow var(--transition-fast);}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 20px 50px rgba(37,99,235,.55);}
+    .btn-secondary{font-size:13px;padding:8px 15px;border-radius:999px;border:1px solid var(--border);background:color-mix(in srgb,var(--bg-alt) 80%,transparent);cursor:pointer;transition:background var(--transition-fast),transform var(--transition-fast),box-shadow var(--transition-fast);}
+    .btn-secondary:hover{transform:translateY(-1px);background:var(--accent-soft);box-shadow:0 12px 30px rgba(15,23,42,.18);}
+    footer{margin-top:26px;font-size:11px;color:var(--text-muted);text-align:center;}
+  </style>
 </head>
+
 <body>
+<canvas id="stars"></canvas>
+
 <div class="page">
-    <header class="nav">
-        <div class="nav-left">
-            <span class="nav-dot"></span>
-            <div>
-                <div class="nav-main">Самир Мусабалиев</div>
-                <div class="nav-sub">Кейс: Print Analytics</div>
-            </div>
-        </div>
-        <div class="nav-right">
-            <a class="btn-ghost" href="../index.html">← На главную</a>
-            <button id="theme-toggle" class="btn-ghost" type="button" aria-label="Переключить тему">
-                <span class="icon" id="theme-icon">🌞</span>
-                <span id="theme-label">Светлая</span>
-            </button>
-        </div>
-    </header>
+  <header class="nav">
+    <div class="nav-left">
+      <div class="nav-logo">
+        <img src="../assets/avatar/photo_2025-12-05_14-16-21.jpg" alt="Самир Мусабалиев">
+      </div>
+      <div class="nav-title">
+        <span class="nav-title-main">Самир Мусабалиев</span>
+        <span class="nav-title-sub">Data / BI Analyst</span>
+      </div>
+    </div>
 
-    <div class="header">
-        <div class="breadcrumbs">
-            <a href="../index.html">Главная</a>
-            <span class="sep">/</span>
-            <span>Print Analytics</span>
-        </div>
-        <h1 class="title">Дашборд печати ценников (план / факт / отклонения)</h1>
-        <p class="subtitle">
-            Как мы связали план печати, фактические логи принтеров и исторические данные,
-            чтобы видеть реальную загрузку и дисциплину исполнения по магазинам.
+    <nav class="nav-links">
+      <a href="../index.html#projects">← Назад к проектам</a>
+      <a href="../index.html#contacts">Контакты</a>
+    </nav>
+
+    <div class="nav-right">
+      <button id="theme-toggle" class="btn-ghost" type="button" aria-label="Переключить тему">
+        <span class="icon" id="theme-icon">🌞</span>
+        <span id="theme-label">Светлая</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Print Analytics</div>
+    <h1 class="title">Дашборд контроля печати: план / факт / отклонения</h1>
+    <p class="subtitle">
+      Цель: сделать прозрачной нагрузку и отклонения по печати (в разрезе ТТ/периодов/пользователей/документов),
+      чтобы видеть аномалии и управлять процессом, а не “искать руками по логам”.
+    </p>
+
+    <div class="meta">
+      <span class="pill">Power BI</span>
+      <span class="pill">SQL / OLAP</span>
+      <span class="pill">Операционная аналитика</span>
+    </div>
+
+    <div class="chips">
+      <span class="chip">Printer logs</span>
+      <span class="chip">Plan/Fact</span>
+      <span class="chip">Week-to-week</span>
+      <span class="chip">Anomaly hints</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" type="button" onclick="location.href='../index.html#projects'">← Вернуться к портфолио</button>
+      <button class="btn-primary" type="button" onclick="document.querySelector('#details').scrollIntoView({behavior:'smooth'})">Читать кейс</button>
+    </div>
+  </section>
+
+  <div class="grid" id="details">
+    <article class="card">
+      <h3>Что сделал</h3>
+      <ul class="list">
+        <li>Связал план печати и факт из логов принтеров (единая картина по магазинам).</li>
+        <li>Собрал ключевые метрики: план/факт, отклонение, динамика к прошлой неделе/году.</li>
+        <li>Учитывал исключения (например, фильтры по типам устройств/форматам ТТ), чтобы данные были “чистыми”.</li>
+        <li>Подготовил основу под обнаружение аномалий (резкие просадки/скачки, подозрительные дубли).</li>
+      </ul>
+
+      <div class="section">
+        <h2>Боль</h2>
+        <p class="text">
+          Логи печати — это много строк и мало смысла. Без витрины/дашборда сложно понять, что реально произошло:
+          просадка из-за исключений, смены настроек, дублей или реальной проблемы.
         </p>
-        <div class="meta-row">
-            <span class="meta-pill">Розничная сеть · гипермаркеты</span>
-            <span class="meta-pill">Роль: разработка логики и дашборда</span>
-            <span class="meta-pill">Стек: Power BI, MSSQL / OLAP</span>
+      </div>
+
+      <div class="section">
+        <h2>Результат</h2>
+        <ul class="list">
+          <li>Контроль процесса печати стал прозрачным на уровне “магазин → день → пользователь/документ”.</li>
+          <li>Проще выявлять просадки и объяснять причины бизнесу/ИТ.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Скрины/макеты</h2>
+        <div class="mock">
+          Положи изображения сюда: <b>assets/cases/print-analytics/</b><br><br>
+          Пример:<br>
+          <code>&lt;img src="../assets/cases/print-analytics/01.png" alt="Dashboard"&gt;</code>
         </div>
-    </div>
+      </div>
+    </article>
 
-    <div class="layout">
-        <article class="card">
-            <section>
-                <h2>Контекст</h2>
-                <p>
-                    В сети регулярно изменяются цены и акции, а вместе с этим растёт объём печати ценников.
-                    Для магазинов это операционная нагрузка: нужно успеть напечатать и повесить всё вовремя.
-                </p>
-                <p>
-                    При этом у центрального офиса не было единой прозрачной картины:
-                    кто печатает больше/меньше плана, где системные проблемы, а где просто всплеск акций.
-                </p>
-                <div class="highlight">
-                    Задача: построить дашборд, который показывает план печати, факт по логам принтеров
-                    и отклонения в динамике по магазинам и периодам.
-                </div>
-            </section>
+    <aside class="card">
+      <h3>Что показать в портфолио</h3>
+      <ul class="list">
+        <li>Скрин главной страницы отчёта (без чувствительных данных).</li>
+        <li>Пример drill-down: от сети → ТТ → день → пользователь.</li>
+        <li>Пояснение фильтров/исключений и почему они нужны.</li>
+      </ul>
 
-            <section>
-                <h2>Источники данных</h2>
-                <p>В дашборд стекались несколько источников:</p>
-                <ul class="list">
-                    <li><b>План печати</b>: сколько ценников должно быть напечатано по магазину / дате.</li>
-                    <li><b>Фактические логи принтеров</b>: сколько реально страниц/ценников было напечатано.</li>
-                    <li><b>Исторические данные</b>: прошлые недели/годы для сравнения.</li>
-                    <li><b>Справочники</b>: магазины, форматы, регионы.</li>
-                </ul>
-                <p>
-                    Всё это нужно было связать так, чтобы можно было смотреть на метрики как в целом по сети,
-                    так и в разрезе одного магазина.
-                </p>
-            </section>
+      <div class="section">
+        <h2>Идея “влог-таймлайна”</h2>
+        <ul class="list">
+          <li>День 1: постановка задачи, источники и ограничения.</li>
+          <li>День 2: витрина/очистка/дубли.</li>
+          <li>День 3: метрики + UI + проверка с бизнесом.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
 
-            <section>
-                <h2>Моя роль и вклад</h2>
-                <ul class="list">
-                    <li>Согласовал с бизнесом, какие именно метрики важны (план/факт, отклонение, динамика).</li>
-                    <li>Собрал и очистил данные по логам печати и планам.</li>
-                    <li>Спроектировал модель данных для Power BI (факты + измерения).</li>
-                    <li>Написал DAX-меры для план/факт/отклонения и сравнения с прошлым периодом.</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Модель данных и DAX</h2>
-                <p>
-                    В основе — факт печати (строки логов) и факт плана, связанные через измерения:
-                    даты, магазины, форматы. Были реализованы меры:
-                </p>
-                <ul class="list">
-                    <li>План печати за период.</li>
-                    <li>Фактическая печать по логам.</li>
-                    <li>Отклонение от плана в абсолюте и %.</li>
-                    <li>Сравнение с прошлой неделей / годом (YoY / WoW логика).</li>
-                </ul>
-                <p>
-                    Отдельно пришлось аккуратно поработать с календарём и фильтрами,
-                    чтобы корректно сравнивать периоды с разной длиной и праздниками.
-                </p>
-            </section>
-
-            <section>
-                <h2>Интерфейс дашборда</h2>
-                <p>
-                    В дашборде были реализованы несколько ключевых экранов:
-                </p>
-                <ul class="list">
-                    <li>Общий обзор по сети: план vs факт по неделям / месяцам.</li>
-                    <li>Таблица магазинов с сортировкой по отклонению.</li>
-                    <li>Карточка магазина: динамика печати во времени, пики нагрузки.</li>
-                    <li>Сравнение текущего периода с прошлым годом.</li>
-                </ul>
-                <p>
-                    Была важна не только красота графиков, но и возможность быстро отфильтровать 
-                    сложные случаи (стабильно недопечатывающие или перегруженные магазины).
-                </p>
-            </section>
-
-            <section>
-                <h2>Результат</h2>
-                <p>
-                    После запуска дашборда:
-                </p>
-                <ul class="list">
-                    <li>Стало проще объяснить, откуда берётся «вечная перегрузка» в отдельных магазинах.</li>
-                    <li>Появился инструмент для диалога между операционным блоком и маркетингом.</li>
-                    <li>Можно было планировать печать заранее, а не тушить пожары в последний момент.</li>
-                </ul>
-            </section>
-        </article>
-
-        <aside>
-            <div class="sidebar-card">
-                <div class="sidebar-title">Кратко</div>
-                <div class="sidebar-sub">Print Analytics</div>
-                <ul class="sidebar-list">
-                    <li>Контроль план/факт печати ценников</li>
-                    <li>Логи принтеров + планы</li>
-                    <li>Сравнение с прошлым периодом</li>
-                </ul>
-            </div>
-
-            <div class="sidebar-card">
-                <div class="sidebar-title">Стек</div>
-                <div class="sidebar-sub">Инструменты</div>
-                <ul class="sidebar-list">
-                    <li>Power BI (моделирование + DAX)</li>
-                    <li>MSSQL / OLAP</li>
-                    <li>Excel для первичной проверки</li>
-                </ul>
-            </div>
-
-            <div class="sidebar-card">
-                <div class="sidebar-title">Роль</div>
-                <div class="sidebar-sub">Моя зона ответственности</div>
-                <ul class="sidebar-list">
-                    <li>Формирование требований к метрикам</li>
-                    <li>Модель данных и DAX</li>
-                    <li>Сбор и очистка исходных данных</li>
-                    <li>Коммуникация с пользователями дашборда</li>
-                </ul>
-            </div>
-        </aside>
-    </div>
-
-    <footer>
-        <span>© <span id="year"></span> Самир · Print Analytics</span>
-    </footer>
+  <footer>© <span id="year"></span> Самир · Data / BI Analyst</footer>
 </div>
 
 <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-    const root = document.documentElement;
-    const toggleBtn = document.getElementById("theme-toggle");
-    const themeIcon = document.getElementById("theme-icon");
-    const themeLabel = document.getElementById("theme-label");
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-    function applyTheme(theme) {
-        root.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
-        if (theme === "dark") {
-            themeIcon.textContent = "🌙";
-            themeLabel.textContent = "Тёмная";
-        } else {
-            themeIcon.textContent = "🌞";
-            themeLabel.textContent = "Светлая";
-        }
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+  const themeLabel = document.getElementById("theme-label");
+
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    if (theme === "dark") { themeIcon.textContent = "🌙"; themeLabel.textContent = "Тёмная"; }
+    else { themeIcon.textContent = "🌞"; themeLabel.textContent = "Светлая"; }
+  }
+
+  (function initTheme() {
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark" || stored === "light") applyTheme(stored);
+    else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) applyTheme("dark");
+    else applyTheme("light");
+  })();
+
+  toggleBtn.addEventListener("click", () => {
+    const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    applyTheme(current === "dark" ? "light" : "dark");
+  });
+
+  let mouseX = 0.5, mouseY = 0.3, targetMouseX = 0.5, targetMouseY = 0.3, t = 0;
+  document.addEventListener("mousemove", (e) => {
+    targetMouseX = e.clientX / window.innerWidth;
+    targetMouseY = e.clientY / window.innerHeight;
+  });
+
+  function animateGradient() {
+    t += 0.02;
+    mouseX += (targetMouseX - mouseX) * 0.1;
+    mouseY += (targetMouseY - mouseY) * 0.1;
+
+    const baseX1 = 0.5, baseY1 = 0.2, baseX2 = 0.1, baseY2 = 0.9;
+    const offsetX = (mouseX - 0.5) * 0.4;
+    const offsetY = (mouseY - 0.5) * 0.4;
+    const breathX = 0.1 * Math.sin(t * 0.9);
+    const breathY = 0.08 * Math.cos(t * 0.7);
+
+    const x1 = (baseX1 + offsetX + breathX) * 100;
+    const y1 = (baseY1 + offsetY + breathY) * 100;
+    const x2 = (baseX2 - offsetX + breathX * 0.7) * 100;
+    const y2 = (baseY2 - offsetY + breathY * 0.7) * 100;
+
+    document.body.style.background = `
+      radial-gradient(circle at ${x1}% ${y1}%, rgba(59, 130, 246, 0.45), transparent 55%),
+      radial-gradient(circle at ${x2}% ${y2}%, rgba(56, 189, 248, 0.35), transparent 65%),
+      var(--bg)
+    `;
+    requestAnimationFrame(animateGradient);
+  }
+  requestAnimationFrame(animateGradient);
+
+  (function () {
+    const canvas = document.getElementById("stars");
+    if (!canvas || !canvas.getContext) return;
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+    const STAR_COUNT = 90;
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener("resize", resize); resize();
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: 1+Math.random()*1.5, speedY: 60+Math.random()*90, speedX: (Math.random()-0.5)*50 });
     }
 
-    (function initTheme() {
-        const stored = localStorage.getItem("theme");
-        if (stored === "dark" || stored === "light") {
-            applyTheme(stored);
-        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            applyTheme("dark");
-        } else {
-            applyTheme("light");
-        }
-    })();
+    let lastTime = 0;
+    function getStarColor() {
+      const theme = document.documentElement.getAttribute("data-theme");
+      return theme === "dark" ? "rgba(248, 250, 252, 0.75)" : "rgba(15, 23, 42, 0.35)";
+    }
 
-    toggleBtn.addEventListener("click", () => {
-        const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-        const next = current === "dark" ? "light" : "dark";
-        applyTheme(next);
-    });
+    function animateStars(ts) {
+      if (!lastTime) lastTime = ts;
+      const dt = (ts - lastTime) / 1000;
+      lastTime = ts;
+
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = getStarColor();
+
+      for (const s of stars) {
+        s.y += s.speedY * dt;
+        s.x += s.speedX * dt;
+        if (s.y - s.size > canvas.height) { s.y = -s.size; s.x = Math.random()*canvas.width; }
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
+      }
+      requestAnimationFrame(animateStars);
+    }
+    requestAnimationFrame(animateStars);
+  })();
 </script>
 </body>
 </html>
