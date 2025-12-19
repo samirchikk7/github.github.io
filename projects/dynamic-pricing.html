@@ -1,513 +1,374 @@
 <!DOCTYPE html>
 <html lang="ru" data-theme="light">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dynamic Pricing — кейс · Самир Мусабалиев</title>
-    <style>
-        :root {
-            --bg: #f5f5f7;
-            --bg-alt: #ffffff;
-            --text: #111111;
-            --text-muted: #555555;
-            --accent: #2563eb;
-            --accent-soft: rgba(37, 99, 235, 0.08);
-            --border: #e0e0e7;
-            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
-            --radius-lg: 24px;
-            --radius-md: 18px;
-            --transition-fast: 0.2s ease;
-            --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Pricing — Самир Мусабалиев</title>
 
-        [data-theme="dark"] {
-            --bg: #020617;
-            --bg-alt: #020617;
-            --text: #f9fafb;
-            --text-muted: #9ca3af;
-            --accent: #60a5fa;
-            --accent-soft: rgba(96, 165, 250, 0.09);
-            --border: #1f2937;
-            --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
-        }
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --bg-alt: #ffffff;
+      --text: #111111;
+      --text-muted: #555555;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.08);
+      --border: #e0e0e7;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --transition-fast: 0.2s ease;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #020617;
+      --bg-alt: #020617;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #60a5fa;
+      --accent-soft: rgba(96, 165, 250, 0.12);
+      --border: #1f2937;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-main); background: var(--bg); color: var(--text); line-height: 1.6; transition: background 0.15s ease-out; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    #stars { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: block; }
+    .page { max-width: 1080px; margin: 0 auto; padding: 20px 16px 40px; position: relative; z-index: 1; }
+    @media (min-width: 768px) { .page { padding: 28px 24px 60px; } }
 
-        body {
-            font-family: var(--font-main);
-            background: radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 55%), var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
+    .nav {
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:12px 16px; margin-bottom:24px; border-radius:999px;
+      background: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+      border:1px solid var(--border); box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+      position: sticky; top: 12px; z-index: 20;
+    }
+    .nav-left { display:flex; align-items:center; gap:10px; }
+    .nav-logo { width:48px; height:48px; border-radius:999px; overflow:hidden; border:2px solid var(--border); box-shadow: 0 0 8px rgba(0,0,0,0.18); }
+    .nav-logo img { width:100%; height:100%; object-fit:cover; object-position: 50% 20%; }
+    .nav-title { display:flex; flex-direction:column; font-size:13px; }
+    .nav-title-main { font-weight:600; }
+    .nav-title-sub { font-size:11px; color: var(--text-muted); }
+    .nav-links { display:none; gap:14px; font-size:13px; }
+    .nav-links a { padding:6px 10px; border-radius:999px; color: var(--text-muted); border:1px solid transparent; transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast); }
+    .nav-links a:hover { background: var(--accent-soft); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 12%, transparent); }
+    @media (min-width: 768px) { .nav-links { display:flex; } }
 
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
+    .btn-ghost {
+      border-radius:999px; border:1px solid var(--border);
+      padding:4px 10px; font-size:11px;
+      display:inline-flex; align-items:center; gap:6px;
+      background: color-mix(in srgb, var(--bg-alt) 75%, transparent);
+      cursor:pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .btn-ghost:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 25%, var(--border)); box-shadow: 0 10px 24px rgba(15,23,42,0.18); }
+    .btn-ghost span.icon { font-size:14px; }
+    @media (min-width: 768px) { .btn-ghost { font-size:12px; padding:6px 12px; } }
 
-        .page {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px 16px 40px;
-        }
+    .hero {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 55%), var(--bg-alt);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 16px;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:4px 10px; border-radius:999px;
+      font-size:11px;
+      border:1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+      background: var(--accent-soft);
+      color: color-mix(in srgb, var(--accent) 80%, var(--text));
+      margin-bottom:10px;
+    }
+    .title { font-size: clamp(22px, 2.6vw, 30px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); font-size: 14px; max-width: 860px; }
 
-        @media (min-width: 768px) {
-            .page {
-                padding: 28px 24px 60px;
-            }
-        }
+    .meta { display:flex; flex-wrap:wrap; gap:8px 10px; margin-top: 10px; font-size: 12px; color: var(--text-muted); }
+    .pill { padding:4px 10px; border-radius:999px; border:1px dashed var(--border); background: color-mix(in srgb, var(--bg) 85%, transparent); }
 
-        /* NAV */
+    .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top: 10px; }
+    .chip { font-size: 11px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--border); background: color-mix(in srgb, var(--bg) 70%, transparent); color: var(--text-muted); }
 
-        .nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 10px 14px;
-            margin-bottom: 24px;
-            border-radius: 999px;
-            background: color-mix(in srgb, var(--bg-alt) 80%, transparent);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(18px);
-            position: sticky;
-            top: 12px;
-            z-index: 20;
-        }
+    .grid { display:grid; gap:14px; margin-top:14px; }
+    @media (min-width: 900px) { .grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); } }
 
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-        }
+    .card {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-alt);
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
+      padding: 14px 14px 12px;
+    }
+    .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .card p { font-size: 13px; color: var(--text-muted); }
 
-        .nav-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            background: var(--accent);
-        }
+    .list { list-style: none; margin-top: 10px; font-size: 13px; color: var(--text-muted); }
+    .list li + li { margin-top: 8px; }
+    .list li::before { content: "•"; margin-right: 8px; color: var(--accent); }
 
-        .nav-main {
-            font-weight: 600;
-        }
+    .section { margin-top: 14px; }
+    .section h2 { font-size: 16px; font-weight: 700; margin: 10px 0 8px; }
+    .section .text { font-size: 14px; color: var(--text-muted); }
 
-        .nav-sub {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
+    .mock {
+      margin-top: 10px;
+      border-radius: var(--radius-md);
+      border: 1px dashed var(--border);
+      background: color-mix(in srgb, var(--bg-alt) 85%, transparent);
+      padding: 12px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px; }
+    .btn-primary {
+      font-size:13px; padding:9px 16px; border-radius:999px;
+      border:none; background: var(--accent); color:#fff;
+      cursor:pointer; box-shadow: 0 16px 40px rgba(37,99,235,0.45);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 20px 50px rgba(37,99,235,0.55); }
+    .btn-secondary {
+      font-size:13px; padding:8px 15px; border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+      cursor:pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .btn-secondary:hover { transform: translateY(-1px); background: var(--accent-soft); box-shadow: 0 12px 30px rgba(15,23,42,0.18); }
 
-        .btn-ghost {
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            padding: 4px 10px;
-            font-size: 11px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: color-mix(in srgb, var(--bg-alt) 75%, transparent);
-            cursor: pointer;
-            transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-        }
-
-        .btn-ghost:hover {
-            transform: translateY(-1px);
-            border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
-        }
-
-        .btn-ghost span.icon {
-            font-size: 14px;
-        }
-
-        /* HEADER */
-
-        .header {
-            margin-bottom: 26px;
-        }
-
-        .breadcrumbs {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .breadcrumbs a {
-            color: var(--text-muted);
-        }
-
-        .breadcrumbs span.sep {
-            margin: 0 4px;
-        }
-
-        .title {
-            font-size: clamp(24px, 3vw, 28px);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .meta-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            font-size: 11px;
-        }
-
-        .meta-pill {
-            padding: 4px 8px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: color-mix(in srgb, var(--bg-alt) 85%, transparent);
-            color: var(--text-muted);
-        }
-
-        /* LAYOUT */
-
-        .layout {
-            display: grid;
-            gap: 16px;
-        }
-
-        @media (min-width: 800px) {
-            .layout {
-                grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
-                align-items: flex-start;
-            }
-        }
-
-        /* MAIN CARD */
-
-        .card {
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            background: var(--bg-alt);
-            box-shadow: var(--shadow-soft);
-            padding: 16px 16px 14px;
-            font-size: 14px;
-        }
-
-        .card h2 {
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-
-        .card section + section {
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px dashed var(--border);
-        }
-
-        .card p + p {
-            margin-top: 6px;
-        }
-
-        .highlight {
-            padding: 8px 10px;
-            border-radius: 12px;
-            border: 1px dashed var(--border);
-            background: var(--accent-soft);
-            font-size: 13px;
-            margin-top: 8px;
-        }
-
-        .list {
-            margin-top: 6px;
-            padding-left: 16px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .list li + li {
-            margin-top: 4px;
-        }
-
-        /* SIDEBAR */
-
-        .sidebar-card {
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            background: var(--bg-alt);
-            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
-            padding: 12px 12px 10px;
-            font-size: 13px;
-        }
-
-        .sidebar-card + .sidebar-card {
-            margin-top: 10px;
-        }
-
-        .sidebar-title {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .sidebar-sub {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .sidebar-list {
-            list-style: none;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .sidebar-list li::before {
-            content: "•";
-            margin-right: 6px;
-            font-size: 10px;
-            vertical-align: middle;
-            color: var(--accent);
-        }
-
-        footer {
-            margin-top: 26px;
-            font-size: 11px;
-            color: var(--text-muted);
-            text-align: center;
-        }
-    </style>
+    footer { margin-top: 26px; font-size: 11px; color: var(--text-muted); text-align: center; }
+  </style>
 </head>
+
 <body>
+<canvas id="stars"></canvas>
+
 <div class="page">
-    <!-- NAV -->
-    <header class="nav">
-        <div class="nav-left">
-            <span class="nav-dot"></span>
-            <div>
-                <div class="nav-main">Самир Мусабалиев</div>
-                <div class="nav-sub">Кейс: Dynamic Pricing</div>
-            </div>
-        </div>
-        <div class="nav-right">
-            <a class="btn-ghost" href="../index.html">
-                ← На главную
-            </a>
-            <button id="theme-toggle" class="btn-ghost" type="button" aria-label="Переключить тему">
-                <span class="icon" id="theme-icon">🌞</span>
-                <span id="theme-label">Светлая</span>
-            </button>
-        </div>
-    </header>
+  <header class="nav">
+    <div class="nav-left">
+      <div class="nav-logo">
+        <img src="../assets/avatar/photo_2025-12-05_14-16-21.jpg" alt="Самир Мусабалиев">
+      </div>
+      <div class="nav-title">
+        <span class="nav-title-main">Самир Мусабалиев</span>
+        <span class="nav-title-sub">Data / BI Analyst</span>
+      </div>
+    </div>
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="breadcrumbs">
-            <a href="../index.html">Главная</a>
-            <span class="sep">/</span>
-            <span>Dynamic Pricing</span>
-        </div>
-        <h1 class="title">Dynamic Pricing в розничной сети (KVI / EDLP / EDPP)</h1>
-        <p class="subtitle">
-            Кейс о том, как мы шаг за шагом строили модуль динамического ценообразования: 
-            от Excel-логики и идей бизнеса до Python-скриптов и прозрачных правил.
+    <nav class="nav-links">
+      <a href="../index.html#projects">← Назад к проектам</a>
+      <a href="../index.html#contacts">Контакты</a>
+    </nav>
+
+    <div class="nav-right">
+      <button id="theme-toggle" class="btn-ghost" type="button" aria-label="Переключить тему">
+        <span class="icon" id="theme-icon">🌞</span>
+        <span id="theme-label">Светлая</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="eyebrow">Dynamic Pricing</div>
+    <h1 class="title">Внутреннее бизнес-приложение динамического ценообразования</h1>
+    <p class="subtitle">
+      Цель: перевести ценообразование из “правил на бумаге/Excel” в управляемую систему, где логика прозрачна,
+      а расчёты воспроизводимы. Внутри — правила KVI/EDLP/EDPP, сегменты, реакция на конкурентов и аналитика эффекта.
+    </p>
+
+    <div class="meta">
+      <span class="pill">Формат: внутреннее бизнес-приложение</span>
+      <span class="pill">Компоненты: правила + аналитика</span>
+      <span class="pill">Источники: DWH / OLAP</span>
+    </div>
+
+    <div class="chips">
+      <span class="chip">Pricing rules</span>
+      <span class="chip">KVI / EDLP / EDPP</span>
+      <span class="chip">Python</span>
+      <span class="chip">SQL</span>
+      <span class="chip">Power BI</span>
+      <span class="chip">Факторный анализ (внутри)</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" type="button" onclick="location.href='../index.html#projects'">← Вернуться к портфолио</button>
+      <button class="btn-primary" type="button" onclick="document.querySelector('#details').scrollIntoView({behavior:'smooth'})">Читать кейс</button>
+    </div>
+  </section>
+
+  <div class="grid" id="details">
+    <article class="card">
+      <h3>Что делал</h3>
+      <ul class="list">
+        <li>Описал и формализовал правила динамического ценообразования: KVI/EDLP/EDPP, ценовые сегменты, условия реакции на конкурентов.</li>
+        <li>Подготовил расчётную часть (Python/SQL), чтобы правила работали одинаково и не “плыли” от ручных правок.</li>
+        <li>Добавил аналитическую часть: оценка эффекта (в т.ч. факторный анализ) как часть одного продукта, а не отдельный проект.</li>
+        <li>Заложил логику “проверяемости”: чтобы можно было объяснить, почему цена такая и какие условия сработали.</li>
+      </ul>
+
+      <div class="section">
+        <h2>Боль бизнеса</h2>
+        <p class="text">
+          Когда правила живут в Excel и в головах — начинается хаос: разные версии файлов, ручные исключения,
+          невозможность быстро отследить причины изменения цены и сравнить сценарии.
         </p>
-        <div class="meta-row">
-            <span class="meta-pill">Розничная сеть · гипермаркеты</span>
-            <span class="meta-pill">Роль: аналитик / инициатор решения</span>
-            <span class="meta-pill">Стек: Python, Power BI, SQL, Excel</span>
+      </div>
+
+      <div class="section">
+        <h2>Результат</h2>
+        <ul class="list">
+          <li>Логика стала прозрачной: “какое правило и почему сработало”.</li>
+          <li>Сократилось число ручных шагов и разночтений между участниками процесса.</li>
+          <li>Появилась основа для масштабирования на новые категории/регионы через конфигурацию.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Макеты/скрины</h2>
+        <div class="mock">
+          Положи картинки сюда: <b>assets/cases/dynamic-pricing/</b><br><br>
+          Пример вставки:<br>
+          <code>&lt;img src="../assets/cases/dynamic-pricing/01.png" alt="..."&gt;</code>
         </div>
-    </div>
+      </div>
+    </article>
 
-    <!-- CONTENT -->
-    <div class="layout">
-        <!-- MAIN STORY -->
-        <article class="card">
-            <section>
-                <h2>Исходная ситуация</h2>
-                <p>
-                    Цены в сети определялись «полуручно»: часть логики жила в Excel-файлах,
-                    часть — в голове категорийщиков, часть — в общих правилах «держать цену не выше конкурентов».
-                    При этом роли SKU (KVI, трафикогенераторы, «молоко корзины») формально не были зафиксированы.
-                </p>
-                <p>
-                    Бизнес-вопрос звучал примерно так: <b>«Как сделать ценообразование более управляемым,
-                    прозрачным и менее ручным, при этом не уходя сразу в тяжёлые промышленные решения?»</b>
-                </p>
-                <div class="highlight">
-                    Цель: перейти от разрозненных Excel-правил к единому модулю Dynamic Pricing с понятными
-                    ролями товаров, сегментами и наборами правил на разные ситуации с конкурентами.
-                </div>
-            </section>
+    <aside class="card">
+      <h3>Стек и артефакты</h3>
+      <ul class="list">
+        <li>Python/SQL: расчёты, выгрузки, проверки.</li>
+        <li>Power BI: визуализация и контроль.</li>
+        <li>Документация: правила, исключения, описания алгоритмов.</li>
+      </ul>
 
-            <section>
-                <h2>Мой вклад</h2>
-                <p>Фактически я выступал связкой между бизнесом и данными:</p>
-                <ul class="list">
-                    <li>Собрал и структурировал существующую Excel-логику и устные правила категорийщиков.</li>
-                    <li>Разработал подход к классификации ассортимента (KVI / Non-KVI, EDLP / EDPP и др.).</li>
-                    <li>Сформировал набор правил ценообразования под разные сценарии конкуренции.</li>
-                    <li>Реализовал прототип расчётов в Python с сохранением «понимаемости» для бизнеса.</li>
-                    <li>Подготовил витрины/выгрузки для дальнейшей визуализации в Power BI.</li>
-                </ul>
-            </section>
+      <div class="section">
+        <h2>Как красиво показать публично</h2>
+        <ul class="list">
+          <li>Скриншоты без чувствительных данных (замазать/сгенерировать).</li>
+          <li>Схема правил (flowchart) + примеры сценариев “до/после”.</li>
+          <li>Табличка “rule triggered” (какие условия сработали).</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
 
-            <section>
-                <h2>Как мы структурировали Dynamic Pricing</h2>
-                <p>Я разделил задачу на несколько уровней:</p>
-                <ul class="list">
-                    <li><b>Классификация ассортимента</b>: роль SKU, ценовой сегмент, чувствительность к цене.</li>
-                    <li><b>Определение KVI</b>: частота покупок, влияние на чек, чувствительность к конкурентам.</li>
-                    <li><b>Логики EDLP / EDPP</b>: где нам важна стабильная низкая цена, а где — работа от промо.</li>
-                    <li><b>Правила реакции на конкурентов</b>: нет конкурентов / 1–2 конкурента / 3+ конкурентов.</li>
-                    <li><b>Ограничения</b>: маржинальность, минимальные/максимальные шаги изменения цены.</li>
-                </ul>
-                <div class="highlight">
-                    Важно было не просто «считать формулы», а сделать так, чтобы каждое правило можно было объяснить:
-                    «Почему здесь именно такая цена, а не другая».
-                </div>
-            </section>
-
-            <section>
-                <h2>Техническая реализация (Python + данные)</h2>
-                <p>Прототип я собирал в Python, чтобы уйти от тяжёлых Excel-таблиц:</p>
-                <ul class="list">
-                    <li>Загрузил данные о продажах, ценах, конкурентах, ролях SKU из разных источников.</li>
-                    <li>Собрал единую таблицу, где по каждой строке SKU × магазин × период хранились все признаки.</li>
-                    <li>Реализовал набор функций, которые по этим признакам выбирают нужный набор правил.</li>
-                    <li>Сделал расчёт «старой» и «новой» цены + флаги, почему было принято такое решение.</li>
-                </ul>
-                <p>
-                    Отдельно закладывал возможность трассировки: по любому товару можно понять,
-                    <b>какие именно правила сработали и почему</b>.
-                </p>
-            </section>
-
-            <section>
-                <h2>Интеграция с BI и проверка логики</h2>
-                <p>
-                    Чтобы бизнес уверенно принял новый подход, важно было показать не только формулы,
-                    но и итоговую картину:
-                </p>
-                <ul class="list">
-                    <li>Собрал выгрузки из Python в формате, удобном для Power BI.</li>
-                    <li>Построил отчёты по распределению ролей, сегментов, реакций на конкурентов.</li>
-                    <li>Сравнил предлагаемые цены с текущими и с конкурентами на пилотных категориях.</li>
-                </ul>
-                <p>
-                    На этом этапе многие правила дорабатывались: где-то бизнес просил ослабить реакцию на конкурентов,
-                    где-то — жёстче держать позицию KVI.
-                </p>
-            </section>
-
-            <section>
-                <h2>Результат и следующий шаг</h2>
-                <p>
-                    Мы получили <b>структурированную и прозрачно описанную схему Dynamic Pricing</b>, которая:
-                </p>
-                <ul class="list">
-                    <li>формализует роли ассортимента и подходы к ценообразованию;</li>
-                    <li>снижает долю «ручных» решений и Excel-магии;</li>
-                    <li>даёт основу для дальнейшей автоматизации и подключения внешних инструментов.</li>
-                </ul>
-                <p>
-                    Следующий логичный шаг — перевести прототип в полноценный производственный контур:
-                    вынести логику в отдельную сервисную компоненту, связать с DWH и автоматизировать расписания.
-                </p>
-            </section>
-        </article>
-
-        <!-- SIDEBAR -->
-        <aside>
-            <div class="sidebar-card">
-                <div class="sidebar-title">Кратко о кейсе</div>
-                <div class="sidebar-sub">Dynamic Pricing · KVI · EDLP / EDPP</div>
-                <ul class="sidebar-list">
-                    <li>Сбор и формализация бизнес-правил ценообразования</li>
-                    <li>Классификация ассортимента и выделение KVI</li>
-                    <li>Реализация прототипа в Python</li>
-                    <li>Удобная выгрузка для Power BI</li>
-                </ul>
-            </div>
-
-            <div class="sidebar-card">
-                <div class="sidebar-title">Стек</div>
-                <div class="sidebar-sub">Инструменты в этом кейсе</div>
-                <ul class="sidebar-list">
-                    <li>Python (pandas, numpy)</li>
-                    <li>SQL / DWH / витрины</li>
-                    <li>Power BI (для отчётности)</li>
-                    <li>Excel (исходная логика и валидация)</li>
-                </ul>
-            </div>
-
-            <div class="sidebar-card">
-                <div class="sidebar-title">Роль</div>
-                <div class="sidebar-sub">Что я делал лично</div>
-                <ul class="sidebar-list">
-                    <li>Анализ текущего процесса ценообразования</li>
-                    <li>Дизайн правил и структуры Dynamic Pricing</li>
-                    <li>Реализация прототипа расчётов</li>
-                    <li>Подготовка материалов для обсуждения с бизнесом</li>
-                </ul>
-            </div>
-        </aside>
-    </div>
-
-    <footer>
-        <span>© <span id="year"></span> Самир · Dynamic Pricing кейс</span>
-    </footer>
+  <footer>
+    <span>© <span id="year"></span> Самир · Data / BI Analyst</span>
+  </footer>
 </div>
 
 <script>
-    // Год в футере
-    document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Тема
-    const root = document.documentElement;
-    const toggleBtn = document.getElementById("theme-toggle");
-    const themeIcon = document.getElementById("theme-icon");
-    const themeLabel = document.getElementById("theme-label");
+  // theme
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+  const themeLabel = document.getElementById("theme-label");
 
-    function applyTheme(theme) {
-        root.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
-        if (theme === "dark") {
-            themeIcon.textContent = "🌙";
-            themeLabel.textContent = "Тёмная";
-        } else {
-            themeIcon.textContent = "🌞";
-            themeLabel.textContent = "Светлая";
-        }
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    if (theme === "dark") { themeIcon.textContent = "🌙"; themeLabel.textContent = "Тёмная"; }
+    else { themeIcon.textContent = "🌞"; themeLabel.textContent = "Светлая"; }
+  }
+
+  (function initTheme() {
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark" || stored === "light") applyTheme(stored);
+    else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) applyTheme("dark");
+    else applyTheme("light");
+  })();
+
+  toggleBtn.addEventListener("click", () => {
+    const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    applyTheme(current === "dark" ? "light" : "dark");
+  });
+
+  // live bg
+  let mouseX = 0.5, mouseY = 0.3, targetMouseX = 0.5, targetMouseY = 0.3, t = 0;
+  document.addEventListener("mousemove", (e) => {
+    targetMouseX = e.clientX / window.innerWidth;
+    targetMouseY = e.clientY / window.innerHeight;
+  });
+
+  function animateGradient() {
+    t += 0.02;
+    mouseX += (targetMouseX - mouseX) * 0.1;
+    mouseY += (targetMouseY - mouseY) * 0.1;
+
+    const baseX1 = 0.5, baseY1 = 0.2, baseX2 = 0.1, baseY2 = 0.9;
+    const offsetX = (mouseX - 0.5) * 0.4;
+    const offsetY = (mouseY - 0.5) * 0.4;
+    const breathX = 0.1 * Math.sin(t * 0.9);
+    const breathY = 0.08 * Math.cos(t * 0.7);
+
+    const x1 = (baseX1 + offsetX + breathX) * 100;
+    const y1 = (baseY1 + offsetY + breathY) * 100;
+    const x2 = (baseX2 - offsetX + breathX * 0.7) * 100;
+    const y2 = (baseY2 - offsetY + breathY * 0.7) * 100;
+
+    document.body.style.background = `
+      radial-gradient(circle at ${x1}% ${y1}%, rgba(59, 130, 246, 0.45), transparent 55%),
+      radial-gradient(circle at ${x2}% ${y2}%, rgba(56, 189, 248, 0.35), transparent 65%),
+      var(--bg)
+    `;
+    requestAnimationFrame(animateGradient);
+  }
+  requestAnimationFrame(animateGradient);
+
+  // stars
+  (function () {
+    const canvas = document.getElementById("stars");
+    if (!canvas || !canvas.getContext) return;
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+    const STAR_COUNT = 90;
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener("resize", resize); resize();
+
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: 1+Math.random()*1.5, speedY: 60+Math.random()*90, speedX: (Math.random()-0.5)*50 });
+      }
+    }
+    createStars();
+
+    let lastTime = 0;
+    function getStarColor() {
+      const theme = document.documentElement.getAttribute("data-theme");
+      return theme === "dark" ? "rgba(248, 250, 252, 0.75)" : "rgba(15, 23, 42, 0.35)";
     }
 
-    (function initTheme() {
-        const stored = localStorage.getItem("theme");
-        if (stored === "dark" || stored === "light") {
-            applyTheme(stored);
-        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            applyTheme("dark");
-        } else {
-            applyTheme("light");
-        }
-    })();
+    function animateStars(ts) {
+      if (!lastTime) lastTime = ts;
+      const dt = (ts - lastTime) / 1000;
+      lastTime = ts;
 
-    toggleBtn.addEventListener("click", () => {
-        const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-        const next = current === "dark" ? "light" : "dark";
-        applyTheme(next);
-    });
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = getStarColor();
+
+      for (const s of stars) {
+        s.y += s.speedY * dt;
+        s.x += s.speedX * dt;
+        if (s.y - s.size > canvas.height) { s.y = -s.size; s.x = Math.random()*canvas.width; }
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
+      }
+      requestAnimationFrame(animateStars);
+    }
+    requestAnimationFrame(animateStars);
+  })();
 </script>
 </body>
 </html>
